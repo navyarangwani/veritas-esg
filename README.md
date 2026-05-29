@@ -112,7 +112,7 @@ veritas-esg/
 
 ## 🏢 Relevance to Enterprise Audit
 
-This system directly addresses a use case in Deloitte's ESG Assurance practice. Key enterprise design decisions:
+This system directly addresses a use case in ESG Assurance practice. Key enterprise design decisions:
 
 - **Modular architecture** — each brain has one responsibility and one failure mode
 - **Audit traceability** — every claim is linked back to its source page
