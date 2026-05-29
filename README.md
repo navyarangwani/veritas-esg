@@ -1,18 +1,4 @@
-Your code is live on GitHub. Go check it:
 
-```
-https://github.com/navyarangwani/veritas-esg
-```
-
-You should see all 15 files there.
-
----
-
-Now add a README so anyone who visits the repo — including your interviewer — immediately understands what they're looking at. This is important.
-
-Create a new file in the root `esg_agent` folder called `README.md` and paste this:
-
-```markdown
 # 🌿 Veritas ESG — Autonomous Greenwashing Detection Agent
 
 An enterprise-grade agentic AI system that autonomously verifies ESG (Environmental, Social, Governance) claims in corporate sustainability reports against external evidence.
