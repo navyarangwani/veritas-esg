@@ -1,47 +1,31 @@
 import json
 import re
 import os
-from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
 from dotenv import load_dotenv
 from utils.prompts import CLAIM_EXTRACTION_PROMPT
+from utils.llm_provider import get_extraction_llm
 
 load_dotenv()
 
 def get_llm():
-    return ChatGroq(
-        api_key=os.getenv("GROQ_API_KEY"),
-        model_name="llama-3.3-70b-versatile",
-        temperature=0
-    )
+    return get_extraction_llm()
 
 
 def clean_json_response(raw: str) -> str:
-    """
-    Aggressively cleans LLM response to extract valid JSON.
-    Handles all the weird ways LLMs return JSON.
-    """
     raw = raw.strip()
-
-    # remove markdown code blocks
     raw = re.sub(r'```json\s*', '', raw)
     raw = re.sub(r'```\s*', '', raw)
 
-    # find the first [ and last ] — extract just the array
     start = raw.find('[')
     end = raw.rfind(']')
-
     if start != -1 and end != -1 and end > start:
-        raw = raw[start:end+1]
-        return raw
+        return raw[start:end+1]
 
-    # if no array found, try finding an object and wrap it
     start = raw.find('{')
     end = raw.rfind('}')
-
     if start != -1 and end != -1 and end > start:
-        raw = raw[start:end+1]
-        return f"[{raw}]"
+        return f"[{raw[start:end+1]}]"
 
     return "[]"
 
@@ -56,7 +40,6 @@ def extract_claims_from_chunk(chunk: dict, llm) -> list:
         response = llm.invoke([HumanMessage(content=prompt)])
         raw = response.content
         cleaned = clean_json_response(raw)
-
         claims = json.loads(cleaned)
 
         if not isinstance(claims, list):
@@ -70,11 +53,9 @@ def extract_claims_from_chunk(chunk: dict, llm) -> list:
                 continue
             if not str(claim["claim_text"]).strip():
                 continue
-
             claim["page"] = chunk["page"]
             claim.setdefault("metric_type", "other")
             claim.setdefault("year", None)
-
             valid_claims.append(claim)
 
         return valid_claims

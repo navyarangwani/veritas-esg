@@ -20,16 +20,18 @@ PAGE: {page}
 
 JSON array:"""
 
-STRATEGY_PROMPT = """You are an ESG audit strategist. Given the claim below, decide the best verification strategy.
+STRATEGY_PROMPT = """You are an ESG audit strategist verifying claims from a corporate sustainability report.
 
+Company: {company}
 Claim: {claim_text}
 Metric type: {metric_type}
 
 Generate 2-3 specific web search queries to verify or contradict this claim.
-Think about: regulatory filings, news articles, sustainability databases, government reports.
+Use the actual company name in every search query.
+Think about: news articles, sustainability reports, annual reports, regulatory filings, ESG databases.
 
 Return a JSON object:
-{{"search_queries": ["first query", "second query", "third query"], "reasoning": "one sentence explaining your strategy"}}
+{{"search_queries": ["first query with company name", "second query with company name", "third query with company name"], "reasoning": "one sentence explaining your strategy"}}
 
 Return ONLY the JSON. No explanation. No markdown."""
 
